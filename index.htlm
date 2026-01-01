@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Interface: 2026 Awakening</title>
+    <style>
+        /* --- SOLO LEVELING SYSTEM THEME --- */
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --mana-blue: #00e6ff; /* The intense electric blue from the anime */
+            --dark-bg: #05070a;
+            --system-dark: rgba(0, 10, 20, 0.9);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--mana-blue);
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            /* Subtle dark dungeon atmosphere background */
+            background-image: radial-gradient(circle at center, #0a1525 0%, #000000 100%);
+        }
+
+        /* The Main System Window - Holographic Feel */
+        .system-window {
+            border: 2px solid var(--mana-blue);
+            /* Stronger mana glow effect */
+            box-shadow: 0 0 30px rgba(0, 230, 255, 0.3), inset 0 0 20px rgba(0, 230, 255, 0.1);
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            background: var(--system-dark);
+            /* Glassmorphism blur effect for holographic look */
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative corners fit for a Hunter's interface */
+        .system-window::before, .system-window::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--mana-blue);
+        }
+        .system-window::before { top: -3px; left: -3px; border-bottom: none; border-right: none; }
+        .system-window::after { bottom: -3px; right: -3px; border-top: none; border-left: none; }
+
+        h1 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--mana-blue);
+            padding-bottom: 15px;
+            margin-top: 0;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--mana-blue);
+        }
+
+        .alert-box {
+            background: rgba(0, 230, 255, 0.05);
+            padding: 15px;
+            border: 1px solid var(--mana-blue);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        /* Inputs and Buttons - Mana infused feel */
+        input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #005577;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            outline: none;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--mana-blue);
+            box-shadow: 0 0 20px rgba(0, 230, 255, 0.5);
+            background: rgba(0, 230, 255, 0.05);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            /* Gradient resembling concentrated mana */
+            background: linear-gradient(90deg, rgba(0, 230, 255, 0.8), rgba(0, 150, 255, 0.8));
+            color: #000;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 900;
+            font-size: 1.2rem;
+            border: 2px solid var(--mana-blue);
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        button:hover {
+            background: var(--mana-blue);
+            box-shadow: 0 0 30px var(--mana-blue);
+        }
+
+        /* Quest Complete Screen */
+        #quest-reward {
+            display: none;
+            text-align: center;
+        }
+
+        /* Hunter Rank Badge Style */
+        .rank-badge {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--mana-blue);
+            padding: 8px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--mana-blue);
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--mana-blue);
+            letter-spacing: 1px;
+        }
+
+        .typing-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #ffffff;
+            text-shadow: 0 0 5px var(--mana-blue);
+            min-height: 120px;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .gold-text {
+            color: #ffd700; /* Gold for rewards */
+            text-shadow: 0 0 10px #ffd700;
+            font-size: 1.3rem;
+            display: block;
+            margin-top: 25px;
+            border: 2px solid #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .error {
+            color: #ff3333;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+            text-shadow: 0 0 10px red;
+            font-weight: bold;
+        }
+
+        /* Exclamation mark animation */
+        .blink { animation: blinker 1s linear infinite; color: red; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Scanline overlay for more digital feel */
+        .scanlines {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 10;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+
+    <div class="system-window">
+        <h1><span class="blink">[!]</span> URGENT QUEST</h1>
+        
+        <div id="login-screen">
+            <div class="alert-box">
+                <strong>[SYSTEM NOTIFICATION]</strong><br>
+                A hidden scenario for "Year 2026" has been initiated.<br>
+                Input your assigned <strong>Hunter Access Key</strong> to receive your briefing.
+            </div>
+
+            <input type="text" id="code-input" placeholder="ENTER ACCESS KEY...">
+            <button onclick="attemptLogin()">INITIALIZE</button>
+            <p id="error-msg" class="error">>> ERROR: INVALID KEY. ACCESS DENIED.</p>
+        </div>
+
+        <div id="quest-reward">
+            <h2 style="color:var(--mana-blue); margin-top:0; text-shadow: 0 0 10px var(--mana-blue);">QUEST CLEAR</h2>
+            <div id="badge-display" class="rank-badge">EVALUATING RANK...</div>
+            
+            <div style="border-top: 1px solid var(--mana-blue); padding-top: 15px;">
+                 <p id="typewriter-text" class="typing-text"></p>
+            </div>
+           
+            
+            <div class="gold-text">[ITEM: 2026 LUCK BUFF ACQUIRED]</div>
+
+            <button onclick="resetSystem()" style="margin-top:25px; background: transparent; border: 2px solid var(--mana-blue); color: var(--mana-blue); box-shadow: none;">CLOSE INTERFACE</button>
+        </div>
+    </div>
+
+    <script>
+        // --- GAME DATA (Exactly the same as before) ---
+        const database = {
+            "IITD": {
+                rank: "HUNTER RANK: S-CLASS (THE SQUAD)",
+                msg: "System Check Complete. Subject: College Wing. Objective: Survive the dungeons of 2026. Status: CGPA Increasing. Stress Decreasing. Let's conquer the next level together."
+            },
+            "FRIEND": {
+                rank: "HUNTER RANK: A-CLASS (ALLY)",
+                msg: "Scanning ID... Match Found. Wishing you a fantastic 2026 awakening. May your stats increase and your opportunities multiply. Happy New Year!"
+            },
+            "SPARKLE": {
+                rank: "HUNTER RANK: SPECIAL-CLASS (MAIN CHARACTER)",
+                msg: "Access Granted. Subject identified as 'The Protagonist'. Prediction for 2026: High success rate, maximum glow up, and immaculate vibes only."
+            },
+            "MINE": {
+                rank: "HUNTER RANK: NATIONAL LEVEL (MY PLAYER 2)",
+                msg: "WARNING: Elevated Heart Rate Detected. You are my Player 2. I don't need a System to tell me you are the best. Let's make 2026 our personal playground. I love you."
+            }
+        };
+
+        // --- GAME LOGIC ---
+        function attemptLogin() {
+            const input = document.getElementById('code-input').value.toUpperCase().trim();
+            const errorMsg = document.getElementById('error-msg');
+            const loginScreen = document.getElementById('login-screen');
+            const rewardScreen = document.getElementById('quest-reward');
+            
+            if (database[input]) {
+                // Success: Hide Login, Show Reward
+                loginScreen.style.display = 'none';
+                rewardScreen.style.display = 'block';
+                
+                // Set Data
+                document.getElementById('badge-display').innerText = database[input].rank;
+                
+                // Start Typing Effect
+                typeWriterEffect(database[input].msg, 'typewriter-text');
+                
+            } else {
+                // Fail: Show Error & Shake
+                errorMsg.style.display = 'block';
+                const win = document.querySelector('.system-window');
+                win.style.transform = "translateX(5px)";
+                setTimeout(() => { win.style.transform = "translateX(-5px)"; }, 50);
+                setTimeout(() => { win.style.transform = "translateX(0)"; }, 100);
+                setTimeout(() => { win.style.transform = "translateX(5px)"; }, 150);
+                setTimeout(() => { win.style.transform = "translateX(0)"; }, 200);
+            }
+        }
+
+        // Typing Effect Function (RPG Style)
+        function typeWriterEffect(text, elementId) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.innerHTML = ""; // Clear previous text
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 30); // Speed of typing
+                }
+            }
+            type();
+        }
+
+        function resetSystem() {
+            document.getElementById('code-input').value = "";
+            document.getElementById('quest-reward').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'block';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
